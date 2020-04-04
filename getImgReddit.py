@@ -53,6 +53,6 @@ def getImage():
     post = json['data']['children']
     # Get the image asociated with a random post
     # range starting at 3 because prevents FAQ posts and related to be read
-    imageUrl = (post[random.randrange(3, len(post), 1)]['data']['url'])
-
+    imageUrl = (post[random.randrange(3, len(post)-1, 1)]['data']['url'])
+    print(subreddit)
     return downloadImg(imageUrl)
