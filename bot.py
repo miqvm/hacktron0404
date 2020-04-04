@@ -1,8 +1,8 @@
 import tweepy,time,os
 import getImgReddit as reddit
 
-auth = tweepy.OAuthHandler("rpHOqNQI8PIDj8AaSMKlB417K", "cgQaYKW6tcYn8Dn245FWayjrDAEoi32OhhVOHFayylbaQsKEaj")
-auth.set_access_token("1246387201610518528-8yvIpEjWKScPpjod9sCqOig8y7PHV2", "X6mdi2HLdvKM3NjYNeaCBJTeiakatajPQaTlPtk0KfMHk")
+auth = tweepy.OAuthHandler("", "")
+auth.set_access_token("", "")
 
 api = tweepy.API(auth, wait_on_rate_limit=True,
     wait_on_rate_limit_notify=True)
@@ -10,7 +10,12 @@ api = tweepy.API(auth, wait_on_rate_limit=True,
  # api.update_status("This is just a test.") How to publish a tweet.
 
 # MAIN
+i = 0
 while True:
+    if i == 29:
+        image = reddit.getImage()
+        api.update_with_media("img/" + str(image))
+        i = 0
     mentions = api.mentions_timeline();
     txt = open("test.txt","r+")
     last_id = int(txt.readline())
@@ -28,4 +33,5 @@ while True:
             api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
             os.system("rm img/" +str(image))
     print("Sleeping...")
+    ++i
     time.sleep(60) #Pause to avoid rate limits.
