@@ -1,8 +1,8 @@
-import tweepy,time
+import tweepy,time,os
 import getImgReddit as reddit
 
-auth = tweepy.OAuthHandler("", "")
-auth.set_access_token("", "")
+auth = tweepy.OAuthHandler("rpHOqNQI8PIDj8AaSMKlB417K", "cgQaYKW6tcYn8Dn245FWayjrDAEoi32OhhVOHFayylbaQsKEaj")
+auth.set_access_token("1246387201610518528-8yvIpEjWKScPpjod9sCqOig8y7PHV2", "X6mdi2HLdvKM3NjYNeaCBJTeiakatajPQaTlPtk0KfMHk")
 
 api = tweepy.API(auth, wait_on_rate_limit=True,
     wait_on_rate_limit_notify=True)
@@ -26,5 +26,6 @@ while True:
             print("Nombre usuario: " + x.screen_name)
             image = reddit.getImage()
             api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
+            os.system("rm img/" +str(image))
     print("Sleeping...")
     time.sleep(60) #Pause to avoid rate limits.
