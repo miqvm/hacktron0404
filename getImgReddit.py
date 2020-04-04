@@ -7,8 +7,8 @@ except ImportError:
     print('Requests must be installed. PLease run: pip install requests')
     exit()
 
-SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "absolutelynotme_irl", "absolutelynotmeirl", "BikiniBottomTwitter", "BlackPeopleTwitter", "comedyhomicide", 
-                        "comedynecromancy", "dank_meme", "dankmemes", "DeepFriedMemes", "Im15AndThisIsYeet", "me_irl", "meirl", "meme", "memes", 
+SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "absolutelynotme_irl", "absolutelynotmeirl", "BikiniBottomTwitter", "BlackPeopleTwitter", "comedyhomicide",
+                        "comedynecromancy", "dank_meme", "dankmemes", "DeepFriedMemes", "Im15AndThisIsYeet", "me_irl", "meirl", "meme", "memes",
                         "Memes_Of_The_Dank", "nukedmemes","okbuddyretard", "SquarePosting", "whitePeopleTwitter"]
 IMG_DIR = "img/"
 URL_SR = "https://www.reddit.com/r/"
@@ -31,7 +31,7 @@ def downloadImg(imgUrl):
     # Get the filename to be saved as
     rawUrl = nameImg(imgUrl)
     filename = IMG_DIR + rawUrl
-    
+
     # if nameImg() deleted the extension succesfuly
     if not(filename == IMG_DIR):
         # Download and save the image requested
@@ -40,8 +40,8 @@ def downloadImg(imgUrl):
             shutil.copyfileobj(req.raw, f)
             f.close()
             return rawUrl
-    
-def main():
+
+def getImage():
     # Get a random subreddit to get an image from
     subreddit = URL_SR + SUBREDDITS_TO_MONITOR[get_randomSubreddit(SUBREDDITS_TO_MONITOR)]
     json = ''
