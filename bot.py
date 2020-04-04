@@ -12,10 +12,20 @@ api = tweepy.API(auth, wait_on_rate_limit=True,
 # MAIN
 i = 0
 while True:
+    print(i);
     if i == 29:
-        image = reddit.getImage()
-        api.update_with_media("img/" + str(image))
-        i = 0
+        correct = 0
+        while(correct == 0):
+            
+            image = reddit.getImage()
+            ext = image[-3] + image[-2] + image[-1]
+            if(ext == "png" or ext == "jpg"):
+                print("Normal upload: " + image)
+                api.update_with_media("img/" + str(image))
+                os.system("rm img/" +str(image))
+                i = 0
+                correct = 1
+                
     mentions = api.mentions_timeline();
     txt = open("test.txt","r+")
     last_id = int(txt.readline())
@@ -26,12 +36,19 @@ while True:
             txt.close()
             user = m.user.id
             x = api.get_user(user)
-            print("ID tweet: " + str(m.id))
-            print("ID usuario: " +str(user))
-            print("Nombre usuario: " + x.screen_name)
-            image = reddit.getImage()
-            api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
-            os.system("rm img/" +str(image))
+            print("tweet ID: " + str(m.id))
+            print("user ID: " +str(user))
+            print("User name: " + x.screen_name)
+            
+            correct = 0
+            while(correct == 0):
+                            
+                image = reddit.getImage()
+                if(reddit.acceptType(image) == 1):
+                    print(image)
+                    api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
+                    os.system("rm img/" +str(image))
+                    correct = 1
     print("Sleeping...")
     ++i
     time.sleep(60) #Pause to avoid rate limits.
