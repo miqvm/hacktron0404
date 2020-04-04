@@ -1,8 +1,8 @@
 import tweepy,time,os
 import getImgReddit as reddit
 
-auth = tweepy.OAuthHandler("rpHOqNQI8PIDj8AaSMKlB417K", "cgQaYKW6tcYn8Dn245FWayjrDAEoi32OhhVOHFayylbaQsKEaj")
-auth.set_access_token("1246387201610518528-8yvIpEjWKScPpjod9sCqOig8y7PHV2", "X6mdi2HLdvKM3NjYNeaCBJTeiakatajPQaTlPtk0KfMHk")
+auth = tweepy.OAuthHandler("", "")
+auth.set_access_token("", "")
 
 api = tweepy.API(auth, wait_on_rate_limit=True,
     wait_on_rate_limit_notify=True)
