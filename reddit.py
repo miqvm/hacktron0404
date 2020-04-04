@@ -32,10 +32,9 @@ CONSUMER_KEY = ''
 CONSUMER_SECRET = ''
 
 # Place the subreddit you want to look up posts from here
-SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "absolutelynotme_irl", "absolutelynotmeirl", "ATBGE", "awfuleverything", 
-                        "BikiniBottomTwitter", "BlackPeopleTwitter", "comedyhomicide", "comedynecromancy", "dank_meme", "dankmemes", 
-                        "DeepFriedMemes", "Im15AndThisIsYeet", "me_irl", "meirl", "meme", "memes", "Memes_Of_The_Dank", "nukedmemes", 
-                        "okbuddyretard", "SquarePosting", "whitePeopleTwitter"]
+SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "absolutelynotme_irl", "absolutelynotmeirl", "BikiniBottomTwitter", "BlackPeopleTwitter", 
+                        "comedyhomicide", "comedynecromancy", "dank_meme", "dankmemes", "DeepFriedMemes", "Im15AndThisIsYeet", "me_irl", 
+                        "meirl", "meme", "memes", "Memes_Of_The_Dank", "nukedmemes", "okbuddyretard", "SquarePosting", "whitePeopleTwitter"]
 
 # Place the name of the folder where the images are downloaded
 IMAGE_DIR = 'img'
