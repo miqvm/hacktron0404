@@ -1,4 +1,5 @@
 import tweepy,time
+import getImgReddit as reddit
 
 auth = tweepy.OAuthHandler("", "")
 auth.set_access_token("", "")
@@ -23,6 +24,7 @@ while True:
             print("ID tweet: " + str(m.id))
             print("ID usuario: " +str(user))
             print("Nombre usuario: " + x.screen_name)
-            api.update_status("Hello " + '@' + str(x.screen_name),in_reply_to_status_id = m.id)
+            image = reddit.getImage()
+            api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
     print("Sleeping...")
-    time.sleep(60)
+    time.sleep(60) #Pause to avoid rate limits.
