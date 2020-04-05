@@ -1,5 +1,6 @@
 import tweepy,time,os
 import getImgReddit as reddit
+import datetime
 
 auth = tweepy.OAuthHandler("", "")
 auth.set_access_token("", "")
@@ -10,10 +11,11 @@ api = tweepy.API(auth, wait_on_rate_limit=True,
  # api.update_status("This is just a test.") How to publish a tweet.
 
 # MAIN
-i = 0
+now = datetime.datetime.now()
+m = now.minute
 while True:
     print(i);
-    if i == 29:
+    if m == 0:
         correct = 0
         while(correct == 0):
             
@@ -23,7 +25,6 @@ while True:
                 print("Normal upload: " + image)
                 api.update_with_media("img/" + str(image))
                 os.system("rm img/" +str(image))
-                i = 0
                 correct = 1
                 
     mentions = api.mentions_timeline();
@@ -51,5 +52,7 @@ while True:
                     os.system("rm img/" +str(image))
                     correct = 1
     print("Sleeping...")
-    i += 1
+    m += 1
+    if m == 120:
+        m=0
     time.sleep(60) #Pause to avoid rate limits.
