@@ -2,8 +2,8 @@ import tweepy,time,os
 import getImgReddit as reddit
 import datetime
 
-auth = tweepy.OAuthHandler("", "")
-auth.set_access_token("", "")
+auth = tweepy.OAuthHandler("rpHOqNQI8PIDj8AaSMKlB417K", "cgQaYKW6tcYn8Dn245FWayjrDAEoi32OhhVOHFayylbaQsKEaj")
+auth.set_access_token("1246387201610518528-8yvIpEjWKScPpjod9sCqOig8y7PHV2", "X6mdi2HLdvKM3NjYNeaCBJTeiakatajPQaTlPtk0KfMHk")
 
 api = tweepy.API(auth, wait_on_rate_limit=True,
     wait_on_rate_limit_notify=True)
@@ -12,10 +12,10 @@ api = tweepy.API(auth, wait_on_rate_limit=True,
 
 # MAIN
 now = datetime.datetime.now()
-m = now.minute
+mnt = int(now.minute)
 while True:
-    print(i);
-    if m == 0:
+    print(mnt);
+    if mnt == 0:
         correct = 0
         while(correct == 0):
             
@@ -52,7 +52,7 @@ while True:
                     os.system("rm img/" +str(image))
                     correct = 1
     print("Sleeping...")
-    m += 1
-    if m == 120:
-        m=0
+    mnt = mnt + 1
+    if mnt >= 120:
+        mnt = 0
     time.sleep(60) #Pause to avoid rate limits.
