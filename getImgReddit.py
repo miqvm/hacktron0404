@@ -7,9 +7,8 @@ except ImportError:
     print('Requests must be installed. PLease run: pip install requests')
     exit()
 
-SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "absolutelynotme_irl", "absolutelynotmeirl", "BikiniBottomTwitter", "BlackPeopleTwitter", "comedyhomicide",
-                        "comedynecromancy", "dank_meme", "dankmemes", "DeepFriedMemes", "Im15AndThisIsYeet", "me_irl", "meirl", "meme", "memes",
-                        "Memes_Of_The_Dank", "nukedmemes","okbuddyretard", "SquarePosting", "whitePeopleTwitter"]
+SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "BikiniBottomTwitter", "dank_meme", "dankmemes", "DeepFriedMemes", "meirl", "memes",
+                        "okbuddyretard", "SquarePosting"]
 IMG_DIR = "img/"
 URL_SR = "https://www.reddit.com/r/"
 
