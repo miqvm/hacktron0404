@@ -41,7 +41,7 @@ while True:
                 os.system("rm img/" +str(image))
         print("Sleeping...")
         ++min
-        if min < 120:
+        if min >= 120:
             min = 0
         time.sleep(60) #Pause to avoid rate limits.
 
