@@ -1,58 +1,44 @@
-import random
-import shutil
-from sys import exit
-try:
-    import requests
-except ImportError:
-    print('Requests must be installed. PLease run: pip install requests')
-    exit()
+import tweepy,time,os
+import datetime from datetime
+import getImgReddit as reddit
 
-SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "BikiniBottomTwitter", "dank_meme", "dankmemes", "DeepFriedMemes", "meirl", "memes",
-                        "okbuddyretard", "SquarePosting"]
-IMG_DIR = "img/"
-URL_SR = "https://www.reddit.com/r/"
+auth = tweepy.OAuthHandler("rpHOqNQI8PIDj8AaSMKlB417K", "cgQaYKW6tcYn8Dn245FWayjrDAEoi32OhhVOHFayylbaQsKEaj")
+auth.set_access_token("1246387201610518528-8yvIpEjWKScPpjod9sCqOig8y7PHV2", "X6mdi2HLdvKM3NjYNeaCBJTeiakatajPQaTlPtk0KfMHk")
 
-# Get a random subreddit from the array
-def get_randomSubreddit(arrayOfSubreddits):
-    return (random.randrange(0, len(arrayOfSubreddits)-1, 1))
-# Convert subreddit URL to be read as a .json
-def createUrl(subreddit):
-    url = subreddit.split('/.json')[0] + "/.json?after={}".format('')
-    return url
+api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-# Delete the extension of the file name
-def nameImg(imgUrl):
-    if 'jpg' or 'webm' or 'mp4' or 'gif' or 'gifv' or 'png' in imgUrl:
-            return imgUrl.split('/')[-1]
+ # api.update_status("This is just a test.") How to publish a tweet.
 
+# MAIN
+min = int(datetime.datetime.now().minute)
 
-def downloadImg(imgUrl):
-    # Get the filename to be saved as
-    rawUrl = nameImg(imgUrl)
-    filename = IMG_DIR + rawUrl
+while True:
+    try:
+        if min == 0:
+            image = reddit.getImage()
+            api.update_with_media("img/" + str(image))
 
-    # if nameImg() deleted the extension succesfuly
-    if not(filename == IMG_DIR):
-        # Download and save the image requested
-        req = requests.get(imgUrl, stream=True)
-        with open(filename, 'wb') as f:
-            shutil.copyfileobj(req.raw, f)
-            f.close()
-            return rawUrl
+        mentions = api.mentions_timeline();
+        txt = open("test.txt","r+")
+        last_id = int(txt.readline())
+        for m in mentions:
+            if m.id > last_id:
+                txt = open("test.txt","w")
+                txt.write(str(m.id))
+                txt.close()
+                user = m.user.id
+                x = api.get_user(user)
+                print("tweet ID: " + str(m.id))
+                print("user ID: " +str(user))
+                print("User name: " + x.screen_name)
+                image = reddit.getImage()
+                api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
+                os.system("rm img/" +str(image))
+        print("Sleeping...")
+        ++min
+        if min < 120:
+            min = 0
+        time.sleep(60) #Pause to avoid rate limits.
 
-def getImage():
-    # Get a random subreddit to get an image from
-    subreddit = URL_SR + SUBREDDITS_TO_MONITOR[get_randomSubreddit(SUBREDDITS_TO_MONITOR)]
-    json = ''
-    # Get URL
-    url = createUrl(subreddit)
-    # Download .json
-    json = requests.get(url, headers={'User-Agent': 'MyRedditScrapper'}).json()
-    # Get the posts
-    post = json['data']['children']
-    # Get the image asociated with a random post
-    # range starting at 3 because prevents FAQ posts and related to be read
-    imageUrl = (post[random.randrange(3, len(post)-1, 1)]['data']['url'])
-    if not ".jpg" or ".png" in imageUrl:
-        getImage();
-    return downloadImg(imageUrl)
+    except Exception as e:
+        print(e)
