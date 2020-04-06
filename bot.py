@@ -1,5 +1,4 @@
 import tweepy,time,os
-import datetime from datetime
 import getImgReddit as reddit
 
 auth = tweepy.OAuthHandler("rpHOqNQI8PIDj8AaSMKlB417K", "cgQaYKW6tcYn8Dn245FWayjrDAEoi32OhhVOHFayylbaQsKEaj")
@@ -9,15 +8,20 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
  # api.update_status("This is just a test.") How to publish a tweet.
 
-# MAIN
-min = int(datetime.datetime.now().minute)
 
+def log_register(text):
+    log = open("log.txt","r+")
+    log.write(time.asctime() + ': ' + text)
+# MAIN
+
+min = int(time.gmtime().tm_min)
 while True:
     try:
         if min == 0:
             image = reddit.getImage()
             api.update_with_media("img/" + str(image))
-            min = int(datetime.datetime.now().minute)
+            log_register("img/" + str(image))
+
         mentions = api.mentions_timeline();
         txt = open("test.txt","r+")
         last_id = int(txt.readline())
@@ -28,15 +32,16 @@ while True:
                 txt.close()
                 user = m.user.id
                 x = api.get_user(user)
-                print("tweet ID: " + str(m.id))
-                print("user ID: " +str(user))
-                print("User name: " + x.screen_name)
+                log_register("tweet ID: " + str(m.id))
+                log_register("user ID: " +str(user))
+                log_register("User name: " + str(x.screen_name))
                 image = reddit.getImage()
+                log_register("img/" + str(image))
                 api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
                 os.system("rm img/" +str(image))
         print("Sleeping...")
         ++min
-        if min >= 120:
+        if min < 120:
             min = 0
         time.sleep(60) #Pause to avoid rate limits.
 
