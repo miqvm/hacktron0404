@@ -17,7 +17,7 @@ while True:
         if min == 0:
             image = reddit.getImage()
             api.update_with_media("img/" + str(image))
-
+            min = int(datetime.datetime.now().minute)
         mentions = api.mentions_timeline();
         txt = open("test.txt","r+")
         last_id = int(txt.readline())
@@ -36,7 +36,7 @@ while True:
                 os.system("rm img/" +str(image))
         print("Sleeping...")
         ++min
-        if min < 120:
+        if min >= 120:
             min = 0
         time.sleep(60) #Pause to avoid rate limits.
 
