@@ -53,5 +53,6 @@ def getImage():
     # Get the image asociated with a random post
     # range starting at 3 because prevents FAQ posts and related to be read
     imageUrl = (post[random.randrange(3, len(post)-1, 1)]['data']['url'])
-    print(subreddit)
+    if not ".jpg" or ".png" in imageUrl:
+        getImage();
     return downloadImg(imageUrl)
