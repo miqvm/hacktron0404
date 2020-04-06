@@ -1,63 +1,58 @@
-import tweepy,time,os
-import getImgReddit as reddit
-import datetime
+import random
+import shutil
+from sys import exit
+try:
+    import requests
+except ImportError:
+    print('Requests must be installed. PLease run: pip install requests')
+    exit()
 
-auth = tweepy.OAuthHandler("", "")
-auth.set_access_token("", "")
+SUBREDDITS_TO_MONITOR = ["2meirl4meirl", "BikiniBottomTwitter", "dank_meme", "dankmemes", "DeepFriedMemes", "meirl", "memes",
+                        "okbuddyretard", "SquarePosting"]
+IMG_DIR = "img/"
+URL_SR = "https://www.reddit.com/r/"
 
-api = tweepy.API(auth, wait_on_rate_limit=True,
-    wait_on_rate_limit_notify=True)
+# Get a random subreddit from the array
+def get_randomSubreddit(arrayOfSubreddits):
+    return (random.randrange(0, len(arrayOfSubreddits)-1, 1))
+# Convert subreddit URL to be read as a .json
+def createUrl(subreddit):
+    url = subreddit.split('/.json')[0] + "/.json?after={}".format('')
+    return url
 
- # api.update_status("This is just a test.") How to publish a tweet.
+# Delete the extension of the file name
+def nameImg(imgUrl):
+    if 'jpg' or 'webm' or 'mp4' or 'gif' or 'gifv' or 'png' in imgUrl:
+            return imgUrl.split('/')[-1]
 
-# MAIN
-now = datetime.datetime.now()
-mnt = int(now.minute)
-while True:
-    try:
-        print(mnt);
-        if mnt == 0:
-            correct = 0
-            while(correct == 0):
-                
-                image = reddit.getImage()
-                ext = image[-3] + image[-2] + image[-1]
-                if(ext == "png" or ext == "jpg"):
-                    print("Normal upload: " + image)
-                    api.update_with_media("img/" + str(image))
-                    os.system("rm img/" +str(image))
-                    correct = 1
-                    
-        mentions = api.mentions_timeline();
-        txt = open("test.txt","r+")
-        last_id = int(txt.readline())
-        for m in mentions:
-            if m.id > last_id:
-                txt = open("test.txt","w")
-                txt.write(str(m.id))
-                txt.close()
-                user = m.user.id
-                x = api.get_user(user)
-                print("tweet ID: " + str(m.id))
-                print("user ID: " +str(user))
-                print("User name: " + x.screen_name)
-                
-                correct = 0
-                while(correct == 0):
-                                
-                    image = reddit.getImage()
-                    ext = image[-3] + image[-2] + image[-1]
-                    if(ext == "png" or ext == "jpg"):
-                        print(image)
-                        api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
-                        os.system("rm img/" +str(image))
-                        correct = 1
-        print("Sleeping...")
-        mnt = mnt + 1
-        if mnt >= 120:
-            mnt = 0
-        time.sleep(60) #Pause to avoid rate limits.
-        
-    except Exception as e:
-        print(e)
 
+def downloadImg(imgUrl):
+    # Get the filename to be saved as
+    rawUrl = nameImg(imgUrl)
+    filename = IMG_DIR + rawUrl
+
+    # if nameImg() deleted the extension succesfuly
+    if not(filename == IMG_DIR):
+        # Download and save the image requested
+        req = requests.get(imgUrl, stream=True)
+        with open(filename, 'wb') as f:
+            shutil.copyfileobj(req.raw, f)
+            f.close()
+            return rawUrl
+
+def getImage():
+    # Get a random subreddit to get an image from
+    subreddit = URL_SR + SUBREDDITS_TO_MONITOR[get_randomSubreddit(SUBREDDITS_TO_MONITOR)]
+    json = ''
+    # Get URL
+    url = createUrl(subreddit)
+    # Download .json
+    json = requests.get(url, headers={'User-Agent': 'MyRedditScrapper'}).json()
+    # Get the posts
+    post = json['data']['children']
+    # Get the image asociated with a random post
+    # range starting at 3 because prevents FAQ posts and related to be read
+    imageUrl = (post[random.randrange(3, len(post)-1, 1)]['data']['url'])
+    if not ".jpg" or ".png" in imageUrl:
+        getImage();
+    return downloadImg(imageUrl)
