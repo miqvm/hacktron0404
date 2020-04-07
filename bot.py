@@ -18,7 +18,7 @@ min = int(time.gmtime().tm_min)
 while True:
     try:
         print(min)
-        if min == 22:
+        if min == 0:
             correct = 0
             while(correct == 0):
             
