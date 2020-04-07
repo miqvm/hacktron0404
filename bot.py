@@ -17,11 +17,21 @@ def log_register(text):
 min = int(time.gmtime().tm_min)
 while True:
     try:
-        if min == 0:
-            image = reddit.getImage()
-            api.update_with_media("img/" + str(image))
-            log_register("img/" + str(image))
-
+        print(min)
+        if min == 22:
+            correct = 0
+            while(correct == 0):
+            
+                image = reddit.getImage()
+                #ext = image[-3] + image[-2] + image[-1]
+                if not ".jpg" or ".png" in image:
+                    print("Normal upload: " + image)
+                    api.update_with_media("img/" + str(image))
+                    os.system("rm img/" +str(image))
+                    correct = 1
+                    min = int(time.gmtime().tm_min)
+                    log_register("tweet ID: " + str(image))
+                
         mentions = api.mentions_timeline();
         txt = open("test.txt","r+")
         last_id = int(txt.readline())
@@ -35,15 +45,24 @@ while True:
                 log_register("tweet ID: " + str(m.id))
                 log_register("user ID: " +str(user))
                 log_register("User name: " + str(x.screen_name))
-                image = reddit.getImage()
+                while(correct == 0):
+
+                    image = reddit.getImage()
+                    #ext = image[-3] + image[-2] + image[-1]
+                    if not ".jpg" or ".png" in image:
+                        print(image)
+                        api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
+                        os.system("rm img/" +str(image))
+                        correct = 1
                 log_register("img/" + str(image))
                 api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
                 os.system("rm img/" +str(image))
         print("Sleeping...")
-        ++min
-        if min >= 120:
+        min=min+1
+        if min >= 119:
             min = 0
         time.sleep(60) #Pause to avoid rate limits.
 
     except Exception as e:
         print(e)
+
