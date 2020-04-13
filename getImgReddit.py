@@ -42,16 +42,20 @@ def downloadImg(imgUrl):
 
 def getImage():
     # Get a random subreddit to get an image from
-    subreddit = URL_SR + SUBREDDITS_TO_MONITOR[get_randomSubreddit(SUBREDDITS_TO_MONITOR)]
-    json = ''
-    # Get URL
-    url = createUrl(subreddit)
-    # Download .json
-    json = requests.get(url, headers={'User-Agent': 'MyRedditScrapper'}).json()
-    # Get the posts
-    post = json['data']['children']
-    # Get the image asociated with a random post
-    # range starting at 3 because prevents FAQ posts and related to be read
-    imageUrl = (post[random.randrange(3, len(post)-1, 1)]['data']['url'])
+    valid = False;
+    while(not(valid)):
+        subreddit = URL_SR + SUBREDDITS_TO_MONITOR[get_randomSubreddit(SUBREDDITS_TO_MONITOR)]
+        json = ''
+        # Get URL
+        url = createUrl(subreddit)
+        # Download .json
+        json = requests.get(url, headers={'User-Agent': 'MyRedditScrapper'}).json()
+        # Get the posts
+        post = json['data']['children']
+        # Get the image asociated with a random post
+        # range starting at 3 because prevents FAQ posts and related to be read
+        imageUrl = (post[random.randrange(3, len(post)-1, 1)]['data']['url'])
+        ext = imageUrl[-3] + imageUrl[-2] + imageUrl[-1]
+        valid = (ext == "jpg" or ext == "png")
+    
     return downloadImg(imageUrl)
-
