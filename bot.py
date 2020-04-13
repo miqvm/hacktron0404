@@ -19,18 +19,12 @@ while True:
     try:
         print(min)
         if min == 0:
-            correct = 0
-            while(correct == 0):
-            
-                image = reddit.getImage()
-                #ext = image[-3] + image[-2] + image[-1]
-                if not ".jpg" or ".png" in image:
-                    print("Normal upload: " + image)
-                    api.update_with_media("img/" + str(image))
-                    os.system("rm img/" +str(image))
-                    correct = 1
-                    min = int(time.gmtime().tm_min)
-                    log_register("tweet ID: " + str(image))
+            image = reddit.getImage()
+            print("Normal upload: " + image)
+            api.update_with_media("img/" + str(image))
+            os.system("rm img/" +str(image))
+            min = int(time.gmtime().tm_min)
+            log_register("tweet ID: " + str(image))
                 
         mentions = api.mentions_timeline();
         txt = open("test.txt","r+")
@@ -45,15 +39,9 @@ while True:
                 log_register("tweet ID: " + str(m.id))
                 log_register("user ID: " +str(user))
                 log_register("User name: " + str(x.screen_name))
-                while(correct == 0):
-
-                    image = reddit.getImage()
-                    #ext = image[-3] + image[-2] + image[-1]
-                    if not ".jpg" or ".png" in image:
-                        print(image)
-                        api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
-                        os.system("rm img/" +str(image))
-                        correct = 1
+                image = reddit.getImage()
+                api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
+                os.system("rm img/" +str(image))
                 log_register("img/" + str(image))
                 api.update_with_media("img/" + str(image),status = "@" + str(x.screen_name),in_reply_to_status_id = m.id)
                 os.system("rm img/" +str(image))
